@@ -11,6 +11,8 @@
 		7CB013942BB72A9D00E93356 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB013932BB72A9D00E93356 /* ContentView.swift */; };
 		7CB013962BB72A9F00E93356 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CB013952BB72A9F00E93356 /* Assets.xcassets */; };
 		7CB013992BB72A9F00E93356 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CB013982BB72A9F00E93356 /* Preview Assets.xcassets */; };
+		7CB013A02BB8014C00E93356 /* BlackJack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB0139F2BB8014C00E93356 /* BlackJack.swift */; };
+		7CB013A22BB8672100E93356 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB013A12BB8672100E93356 /* CardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +21,8 @@
 		7CB013932BB72A9D00E93356 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7CB013952BB72A9F00E93356 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7CB013982BB72A9F00E93356 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		7CB0139F2BB8014C00E93356 /* BlackJack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackJack.swift; sourceTree = "<group>"; };
+		7CB013A12BB8672100E93356 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +59,8 @@
 				7CB013932BB72A9D00E93356 /* ContentView.swift */,
 				7CB013952BB72A9F00E93356 /* Assets.xcassets */,
 				7CB013972BB72A9F00E93356 /* Preview Content */,
+				7CB0139F2BB8014C00E93356 /* BlackJack.swift */,
+				7CB013A12BB8672100E93356 /* CardView.swift */,
 			);
 			path = "Guess the Card";
 			sourceTree = "<group>";
@@ -139,6 +145,8 @@
 			files = (
 				7CB013942BB72A9D00E93356 /* ContentView.swift in Sources */,
 				7CB013922BB72A9D00E93356 /* Guess_the_CardApp.swift in Sources */,
+				7CB013A22BB8672100E93356 /* CardView.swift in Sources */,
+				7CB013A02BB8014C00E93356 /* BlackJack.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
