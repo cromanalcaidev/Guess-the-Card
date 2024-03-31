@@ -26,9 +26,10 @@ struct BlackJack: View {
     
     @State private var cardValues = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "J", "Q", "K"]
     @State private var suits = ["♣️", "♥️", "♠️", "♦️"]
-    
+
     @State private var fullDeck = [String]()
     @State private var playerCards = [String]()
+    @State private var houseCards = [String]()
     
     @State private var houseResult = 0
     @State private var playerResult = 0
@@ -36,125 +37,184 @@ struct BlackJack: View {
     @State private var cardText = ""
     @State private var turn = 0
     @State private var round = 0
-    @State private var points = 0
+    @State private var playerCount = 0
     
+    @State private var showShuffle = true
+    @State private var isBlackJack = false
+    @State private var isOver21 = false
+    @State private var playerStands = false
     
     var body: some View {
-        
-        Spacer()
-        
-        HStack {
-            Button {
-                shuffle()
-            } label: {
-                Text("Shuffle deck")
-                    .font(.system(size: 18))
-                    .foregroundColor(.white)
-            }
-            .frame(width: 120, height: 40)
-            .background(.blue)
-            .cornerRadius(8)
-            .padding()
-            
-            Button {
-                deal()
-            } label: {
-                Text("Deal a card")
-                    .font(.system(size: 18))
-                    .foregroundColor(.white)
-            }
-            .frame(width: 120, height: 40)
-            .background(.blue)
-            .cornerRadius(8)
-            .padding()
-        }
-        
-        Spacer()
-        
-        Section {
-            CardView(name: cardText)
-        }
-        
-        Spacer()
-        
-        Section {
-            HStack {
-                ForEach(playerCards, id: \.self) {card in
-                    CardView(name: card)
+        ZStack {
+            VStack {
+                Spacer()
+                
+                Spacer()
+                Spacer()
+                
+                showShuffle ? Button {
+                    shuffle()
+                } label: {
+                    Text("Shuffle deck")
+                        .font(.system(size: 18))
+                        .foregroundColor(.white)
                 }
+                .frame(width: 120, height: 40)
+                .background(.blue)
+                .cornerRadius(8)
+                .padding()
+                
+                :
+                
+                Button {
+                    //
+                } label: {
+                    Text("")
+                        .font(.system(size: 18))
+                        .foregroundColor(.green)
+                }
+                .frame(width: 120, height: 40)
+                .background(.green)
+                .cornerRadius(8)
+                .padding()
+                
+                Spacer()
+                
+                Section {
+                    CardView(name: cardText)
+                }
+                .alert("Black Jack", isPresented: $isBlackJack) {
+                    Button("New game") {
+                        restartGame()
+                    }
+                }
+                .alert("Your score is \(playerCount)", isPresented: $playerStands) {
+                    Button("Let the houe play") {
+                        housePlays()
+                    }
+                }
+                .alert("Sorry, you lost", isPresented: $isOver21) {
+                    Button("New game") {
+                        restartGame()
+                    }
+                }
+                
+                Spacer()
+                
+                Section {
+                    VStack {
+                        HStack {
+                            ForEach(playerCards, id: \.self) {card in
+                                CardView(name: card)
+                            }
+                        }
+                        
+                        HStack {
+                            Button {
+                                deal()
+                            } label: {
+                                Text("Deal a card")
+                                    .font(.system(size: 18))
+                                    .foregroundColor(.white)
+                            }
+                            .frame(width: 120, height: 40)
+                            .background(.blue)
+                            .cornerRadius(8)
+                            .padding()
+                            
+                            Button {
+                                stand()
+                            } label: {
+                                Text("Stand")
+                                    .font(.system(size: 18))
+                                    .foregroundColor(.white)
+                            }
+                            .frame(width: 120, height: 40)
+                            .background(.blue)
+                            .cornerRadius(8)
+                            .padding()
+                        }
+                        
+                        Text("Your count is \(playerCount)")
+                    }
+                }
+                
+                Spacer()
             }
         }
-        
-        Spacer()
+        .frame(maxWidth: .infinity)
+        .background(.green)
+        .ignoresSafeArea()
         
     }
     
     func count() {
-        
-        for card in playerCards {
-            switch card {
-            case "A♠️", "A♣️", "A♥️", "A♦️":
-                points += 11
-            case "2♠️", "2♣️", "2♥️", "2♦️":
-                points += 2
-            case "3♠️", "3♣️", "3♥️", "3♦️":
-                points += 3
-            case "4♠️", "4♣️", "4♥️", "4♦️":
-                points += 4
-            case "5♠️", "5♣️", "5♥️", "5♦️":
-                points += 5
-            case "6♠️", "6♣️", "6♥️", "6♦️":
-                points += 6
-            case "7♠️", "7♣️", "7♥️", "7♦️":
-                points += 7
-            case "8♠️", "8♣️", "8♥️", "8♦️":
-                points += 8
-            case "9♠️", "9♣️", "9♥️", "9♦️":
-                points += 9
-            case "J♠️", "J♣️", "J♥️", "J♦️":
-                points += 10
-            case "Q♠️", "Q♣️", "Q♥️", "Q♦️":
-                points += 10
-            case "K♠️", "K♣️", "K♥️", "K♦️":
-                points += 10
-            default:
-                print("nothing")
+        switch cardText {
+        case "A♠️", "A♣️", "A♥️", "A♦️":
+            if playerCount >= 11 {
+                playerCount += 1
+            } else {
+                playerCount += 11
             }
+        case "2♠️", "2♣️", "2♥️", "2♦️":
+            playerCount += 2
+        case "3♠️", "3♣️", "3♥️", "3♦️":
+            playerCount += 3
+        case "4♠️", "4♣️", "4♥️", "4♦️":
+            playerCount += 4
+        case "5♠️", "5♣️", "5♥️", "5♦️":
+            playerCount += 5
+        case "6♠️", "6♣️", "6♥️", "6♦️":
+            playerCount += 6
+        case "7♠️", "7♣️", "7♥️", "7♦️":
+            playerCount += 7
+        case "8♠️", "8♣️", "8♥️", "8♦️":
+            playerCount += 8
+        case "9♠️", "9♣️", "9♥️", "9♦️":
+            playerCount += 9
+        case "J♠️", "J♣️", "J♥️", "J♦️":
+            playerCount += 10
+        case "Q♠️", "Q♣️", "Q♥️", "Q♦️":
+            playerCount += 10
+        case "K♠️", "K♣️", "K♥️", "K♦️":
+            playerCount += 10
+        default:
+            print("nothing")
         }
         
     }
     
+    func stand() {
+        playerStands = true
+    }
+    
     func blackJack() {
-        //
+        isBlackJack = true
     }
     
     func deal() {
-        
-        if points == 21 {
+        if playerCount > 21 {
+            isOver21 = true
+        } else if playerCount == 21{
             blackJack()
-            print(points)
-            print("blackjack!")
-        } else if points > 21 {
-            print(points)
-            print("You lost")
         } else {
             if isFirstCard {
                 cardText = "\(fullDeck[turn])"
                 playerCards.append(fullDeck[turn])
                 turn += 1
                 isFirstCard = false
-                print(points)
             } else {
                 turn += 1
                 cardText = "\(fullDeck[turn])"
                 playerCards.append(fullDeck[turn])
-                print(points)
             }
-            count()
         }
+        count()
+        print(playerCount)
     }
     
     func shuffle() {
+        showShuffle = false
         round += 1
         fullDeck = [String]()
         for cardValue in cardValues {
@@ -164,6 +224,21 @@ struct BlackJack: View {
         }
         fullDeck.shuffle()
     }
+    
+    func restartGame() {
+        shuffle()
+        playerCards = [String]()
+        isOver21 = false
+        playerStands = false
+        isBlackJack = false
+        playerCount = 0
+        cardText = ""
+    }
+    
+    func housePlays() {
+        
+    }
+    
 }
 
 #Preview {

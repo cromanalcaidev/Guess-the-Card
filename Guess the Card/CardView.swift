@@ -9,13 +9,17 @@ import SwiftUI
 
 struct CardView: View {
     
+    @State var showCard = true
+    
     var name: String
     
     var body: some View {
+        
         Text(name)
+            .font(.system(size: 29))
             .frame(width: 60, height: 90)
-            .border(Color.red)
-            .background(.green)
+            .border(showCard ? Color.red : Color.green)
+            .background(showCard ? .white : .green)
             .cornerRadius(3.0)
     }
 }
